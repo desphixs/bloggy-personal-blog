@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Post, Comment
 
 # A View in Django is like a friendly waiter in a high-end restaurant.
 # 1. You (the client) sit at the table and ask the waiter for a specific menu item (the URL request).
@@ -43,6 +43,30 @@ def post_detail(request, id):
     # never existed, instead of freezing or crashing the whole library (a server error), the assistant politely 
     # tells you: "Sorry, we don't have that book!" (which returns a clean 404 Page Not Found error to the user).
     post = get_object_or_404(Post, id=id)
+    
+    # We check if the guest has sent us data (a POST request) instead of just viewing the page (a GET request).
+    # Analogy: If you just walk into a diner, you are looking at the menu (GET). But if you write an order on a slip 
+    # and hand it to the chef, you are posting new instructions (POST).
+    if request.method == 'POST':
+        # We extract the submitted form inputs directly from the request.POST tray.
+        # Analogy: Reaching into the order envelope and pulling out the slip showing 'author_name' and 'body'.
+        author_name = request.POST.get('author_name')
+        body = request.POST.get('body')
+        
+        # If both fields are filled out, we create a new Comment record in the database drawer.
+        # Analogy: Creating a new sticky note using the form inputs, physically tying it to the current Post book, 
+        # and pinning it down so it is stored permanently.
+        if author_name and body:
+            Comment.objects.create(
+                post=post,
+                author_name=author_name,
+                body=body
+            )
+            
+        # Finally, we perform a Redirect to reload the exact same article details page.
+        # Analogy: Instead of serving the customer an empty plate or leaving them stranded, the waiter 
+        # spins them around and reseats them at the exact same table with a fresh, updated plate containing their new comment!
+        return redirect('post_detail', id=post.id)
     
     # Using our reverse database relationship, we fetch all comments linked to this specific blog post.
     # Analogy: Imagine each post book is physically tied by strings to several yellow sticky notes (comments).

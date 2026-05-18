@@ -153,6 +153,57 @@
             {% endif %}
         </section>
 
+        <!-- Comment Submission Form Section (Task 6) -->
+        <section class="border-t border-zinc-900 pt-10 mt-12">
+            <h2 class="font-outfit font-semibold text-lg text-white mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-pen-nib text-zinc-500"></i>
+                Share Your Thoughts
+            </h2>
+
+            <!-- Raw HTML Form: Submits inputs directly to the view via POST. -->
+            <!-- Analogy: Writing our details on a card and sliding it directly into the kitchen slot (the views handler). -->
+            <form method="POST" class="space-y-5">
+                <!-- CSRF Token: Django's built-in security stamp. -->
+                <!-- Analogy: A unique wax seal stamped on our letter to prove it actually originated from our kitchen, -->
+                <!-- protecting our app from malicious letter-interceptors (Cross-Site Request Forgery attacks). -->
+                {% csrf_token %}
+
+                <!-- Input field for the author's name -->
+                <div>
+                    <label for="author_name" class="block font-outfit font-medium text-xs text-zinc-400 mb-2">
+                        Your Name
+                    </label>
+                    <input type="text" 
+                           id="author_name" 
+                           name="author_name" 
+                           required 
+                           placeholder="e.g. Destiny Franks" 
+                           class="w-full bg-[#0a0a0a] border border-zinc-900 focus:border-zinc-700 text-white rounded-lg px-4 py-3 placeholder:text-zinc-600 focus:outline-none transition-all duration-200 text-sm">
+                </div>
+
+                <!-- Input textarea for the comment message body -->
+                <div>
+                    <label for="body" class="block font-outfit font-medium text-xs text-zinc-400 mb-2">
+                        Comment
+                    </label>
+                    <textarea id="body" 
+                              name="body" 
+                              rows="4" 
+                              required 
+                              placeholder="Write your review or thoughts here..." 
+                              class="w-full bg-[#0a0a0a] border border-zinc-900 focus:border-zinc-700 text-white rounded-lg px-4 py-3 placeholder:text-zinc-600 focus:outline-none transition-all duration-200 text-sm resize-none"></textarea>
+                </div>
+
+                <!-- Submission Trigger -->
+                <div class="flex justify-end">
+                    <button type="submit" 
+                            class="px-6 py-2.5 inline-flex items-center gap-2 rounded-lg text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-md active:scale-95 transition-all duration-200">
+                        <i class="fa-solid fa-paper-plane text-xs"></i> Post Comment
+                    </button>
+                </div>
+            </form>
+        </section>
+
     </main>
 
     <!-- FOOTER SECTION -->
