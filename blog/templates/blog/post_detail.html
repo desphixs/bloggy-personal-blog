@@ -103,12 +103,54 @@
             </p>
         </article>
 
-        <!-- Dynamic Post Comments Counter Hook (To prepare for Comment lists in Task 5) -->
+        <!-- Dynamic Post Comments Counter Hook (Task 5) -->
         <section class="border-t border-zinc-900 pt-10">
             <h2 class="font-outfit font-semibold text-lg text-white mb-6 flex items-center gap-2">
                 <i class="fa-regular fa-comments text-zinc-500"></i>
-                Comments ({{ post.comments.count }})
+                Comments ({{ comments.count }})
             </h2>
+
+            <!-- Django Template Check: Verify if comments exist before laying down visual lists. -->
+            {% if comments %}
+                <div class="space-y-4">
+                    <!-- Django Loop: Iterate over each comment linked to this post in natural chronological order. -->
+                    {% for comment in comments %}
+                        <!-- Individual Comment card with premium minimalist styling -->
+                        <div class="bg-[#0a0a0a] border border-zinc-900 hover:border-zinc-800 rounded-xl p-5 sm:p-6 transition-all duration-200">
+                            <!-- Commenter Header -->
+                            <div class="flex items-center justify-between mb-3 text-xs">
+                                <span class="font-outfit font-medium text-white flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400">
+                                        <i class="fa-regular fa-user text-[10px]"></i>
+                                    </span>
+                                    {{ comment.author_name }}
+                                </span>
+                                <span class="text-zinc-500 font-light flex items-center gap-1.5">
+                                    <i class="fa-regular fa-clock text-[10px]"></i>
+                                    {{ comment.created_at|date:"F d, Y" }}
+                                </span>
+                            </div>
+
+                            <!-- Comment Content Body -->
+                            <!-- Analogy: Preserving the reader's line spacing so their feedback is presented with structural respect. -->
+                            <p class="text-zinc-300 text-sm leading-relaxed font-light whitespace-pre-wrap pl-8">
+                                {{ comment.body }}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Empty State: Simple, clean placeholder card when no reader comments exist -->
+                <div class="text-center py-10 bg-[#0a0a0a]/50 border border-zinc-900 rounded-xl p-6 max-w-sm mx-auto">
+                    <div class="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-600 mx-auto mb-4">
+                        <i class="fa-regular fa-message text-sm"></i>
+                    </div>
+                    <h3 class="font-outfit font-medium text-sm text-white mb-1">No comments yet</h3>
+                    <p class="text-zinc-500 text-xs text-zinc-400">
+                        Be the first to share your thoughts! Add comments via the admin panel.
+                    </p>
+                </div>
+            {% endif %}
         </section>
 
     </main>

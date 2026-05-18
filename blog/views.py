@@ -44,10 +44,19 @@ def post_detail(request, id):
     # tells you: "Sorry, we don't have that book!" (which returns a clean 404 Page Not Found error to the user).
     post = get_object_or_404(Post, id=id)
     
-    # We package our single post onto the carrying tray context dictionary.
-    # Analogy: Loading the book onto the waiter's tray so it can travel into the template room (post_detail.html).
+    # Using our reverse database relationship, we fetch all comments linked to this specific blog post.
+    # Analogy: Imagine each post book is physically tied by strings to several yellow sticky notes (comments).
+    # Since we set up `related_name='comments'` in our Comment model, we can simply grab our post book 
+    # and pull the strings (`post.comments`) to get every sticky note attached to it!
+    # We sort them by 'created_at' in ascending order so that comments read naturally from oldest to newest.
+    comments = post.comments.all().order_by('created_at')
+    
+    # We package our single post and its linked comments onto the carrying tray context dictionary.
+    # Analogy: Loading both the book and the box of attached sticky notes onto the waiter's tray 
+    # so they can travel together into the template room (post_detail.html).
     context = {
         'post': post,
+        'comments': comments,
     }
     
     # Render the detailed template, mapping request, template name, and context together.
